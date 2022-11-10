@@ -7,10 +7,9 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -35,7 +34,7 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUser(username));
     }
 
-    @PostMapping("user/addrole")
+    @PostMapping("/role/addtouser")
    public ResponseEntity<Role> addRoleToUser(@RequestBody AssignRoleToUserForm form) {
         userService.addRoleToUser(form.getUser(),form.getRole());
         return ResponseEntity.ok().build();

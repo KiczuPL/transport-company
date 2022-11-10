@@ -25,16 +25,18 @@ public class DataLoader {
     @PostConstruct
     public void loadData() {
         roleRepository.saveAll(List.of(
-                new Role(null, "ADMIN"),
-                new Role(null, "USER")
+                new Role(null, "USER"),
+                new Role(null, "ADMIN")
+
         ));
 
         Company company  = new Company(null,"asd","asd","asd");
         companyRepository.save(company);
 
-        userService.saveUser(new User(null, "Kiczu@@@", "Kiczu", "1234", company, new ArrayList<>()));
+        userService.saveUser(new User(null, "Kiczu@@@asd", "Kiczu", "1234", company, new ArrayList<>()));
 
         userService.addRoleToUser("Kiczu","ADMIN");
+        userService.addRoleToUser("Kiczu","USER");
 
     }
 }
