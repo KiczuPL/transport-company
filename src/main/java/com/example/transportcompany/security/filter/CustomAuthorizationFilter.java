@@ -4,7 +4,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.transportcompany.security.JwtConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,11 +23,16 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@RequiredArgsConstructor
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
+
+    private final JwtConfig jwtConfig;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().equals("/login")){
-            System.out.println("LOGOWAńSKO"); //TODO: DELETE THIS
+        if (request.getServletPath().equals("/login") ||
+                request.getServletPath().equals("api/auth/refreshtoken") ||
+                request.getServletPath().equals("api/auth/login")){
             filterChain.doFilter(request,response);
         }else{
             String authorizationHeader = request.getHeader(AUTHORIZATION);
@@ -33,7 +40,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 try{
                     String token = authorizationHeader.substring(7);
                     //TODO: refactor code so both filters the same Algorithm object - Singleton?
-                    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                    Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecretKey().getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
@@ -43,10 +50,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,null,authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request,response);
-                    System.out.println("ZEZWALAńSKO"); //TODO: DELETE THIS
 
                 }catch (Exception exception){
-                    System.out.println("AAAAAAAAAAAAA KUUUUURRRRRRRWWWWAAAAAAAAAAAAAAA"); //TODO: DELETE THIS
                     response.setHeader("error",exception.getMessage());
                     response.setStatus(FORBIDDEN.value());
 
@@ -57,7 +62,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     new ObjectMapper().writeValue(response.getOutputStream(),error);
                 }
             }else{
-                System.out.println("WTF"); //TODO: DELETE THIS
                 filterChain.doFilter(request,response);
             }
         }

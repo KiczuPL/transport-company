@@ -2,18 +2,18 @@ package com.example.transportcompany.controllers;
 
 import com.example.transportcompany.model.dao.Role;
 import com.example.transportcompany.model.dao.User;
+import com.example.transportcompany.security.JwtConfig;
 import com.example.transportcompany.services.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -45,7 +45,6 @@ public class UserController {
     public ResponseEntity<Role> saveRole(@RequestBody Role role){
           return new ResponseEntity<Role>(userService.saveRole(role), HttpStatus.CREATED);
     }
-
 }
 
 @Data

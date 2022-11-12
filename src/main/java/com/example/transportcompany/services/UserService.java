@@ -5,6 +5,7 @@ import com.example.transportcompany.model.dao.User;
 import com.example.transportcompany.repositories.RoleRepository;
 import com.example.transportcompany.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -30,10 +32,12 @@ public class UserService implements UserDetailsService {
         if (userByUsername != null)
             throw new IllegalArgumentException("There already exists user with that username.");
 
+        log.info("Saving user: "+user.toString());
         return userRepository.save(user);
     }
 
     public Role saveRole(Role role){
+        log.info("Saving role: " + role.getName());
         return roleRepository.save(role);
     }
 
@@ -41,6 +45,8 @@ public class UserService implements UserDetailsService {
         User  user = userRepository.findByUsername(username);
         Role role = roleRepository.findByName(rolename);
         user.getRoles().add(role);
+        userRepository.save(user);
+        log.info("Role: "+rolename +" added to user: " + username);
     }
 
     public User getUser(String username){
@@ -48,6 +54,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> getAllUsers(){
+        log.info("getting all users!");
         return userRepository.findAll();
     }
 
