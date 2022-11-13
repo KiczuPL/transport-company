@@ -2,7 +2,9 @@ package com.example.transportcompany.model.dao;
 
 import com.example.transportcompany.model.OrderStatus;
 import com.example.transportcompany.model.VehicleType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;

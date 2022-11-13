@@ -2,7 +2,6 @@ package com.example.transportcompany.controllers;
 
 import com.example.transportcompany.model.dao.Role;
 import com.example.transportcompany.model.dao.User;
-import com.example.transportcompany.security.JwtConfig;
 import com.example.transportcompany.services.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
