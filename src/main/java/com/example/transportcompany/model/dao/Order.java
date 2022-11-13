@@ -1,27 +1,42 @@
 package com.example.transportcompany.model.dao;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.transportcompany.model.OrderStatus;
+import com.example.transportcompany.model.VehicleType;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "orders")
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull
     private Long companyId;
-
-    public Order() {
-
-    }
+    @NotNull
+    @NotBlank
+    private String addressFrom;
+    @NotNull
+    @NotBlank
+    private String addressTo;
+    @NotNull
+    private VehicleType vehicleType;
+    @NotNull
+    private LocalDate pickUpDate;
+    @CreationTimestamp
+    private LocalDateTime creationDateTime;
+    @NotNull
+    private OrderStatus status = OrderStatus.PLACED;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Vehicle assignedVehicle;
 }
