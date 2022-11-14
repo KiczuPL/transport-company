@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,35 +20,43 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers(){
+    public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
     @PostMapping("/user/save")
-    public ResponseEntity<User> saveUser(@RequestBody User user){
-        return new ResponseEntity<User>(userService.saveUser(user), HttpStatus.CREATED);
+    public ResponseEntity<User> saveUser(@Validated @RequestBody User user) {
+        User result = userService.saveUser(user);
+        if (result != null)
+            return new ResponseEntity<User>(result, HttpStatus.CREATED);
+        return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<User> getUser(@RequestBody String username){
+    @GetMapping("/user/{username}")
+    public ResponseEntity<User> getUser(@PathVariable String username) {
         return ResponseEntity.ok().body(userService.getUser(username));
     }
 
+    public ResponseEntity<User> deleteUser(Long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<User>(HttpStatus.OK);
+    }
+
     @PostMapping("/role/addtouser")
-   public ResponseEntity<Role> addRoleToUser(@RequestBody AssignRoleToUserForm form) {
-        userService.addRoleToUser(form.getUser(),form.getRole());
+    public ResponseEntity<Role> addRoleToUser(@Validated @RequestBody AssignRoleToUserForm form) {
+        userService.addRoleToUser(form.getUser(), form.getRole());
         return ResponseEntity.ok().build();
     }
 
 
     @PostMapping("/role/save")
-    public ResponseEntity<Role> saveRole(@RequestBody Role role){
-          return new ResponseEntity<Role>(userService.saveRole(role), HttpStatus.CREATED);
+    public ResponseEntity<Role> saveRole(@Validated @RequestBody Role role) {
+        return new ResponseEntity<Role>(userService.saveRole(role), HttpStatus.CREATED);
     }
 }
 
 @Data
-class  AssignRoleToUserForm{
+class AssignRoleToUserForm {
     private String user;
     private String role;
 }

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.security.RolesAllowed;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -14,15 +16,18 @@ public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
 
+    @RolesAllowed("ROLE_ADMIN")
     public Vehicle saveVehicle(Vehicle vehicle) {
         log.info("Saving vehicle: {}", vehicle.toString());
         return vehicleRepository.save(vehicle);
     }
 
+    @RolesAllowed("ROLE_ADMIN")
     public Vehicle getVehicle(Long id) {
         return vehicleRepository.getReferenceById(id);
     }
 
+    @RolesAllowed("ROLE_ADMIN")
     public Vehicle updateVehicle(Vehicle vehicle) {
         try {
             Vehicle vehicleById = vehicleRepository.getReferenceById(vehicle.getId());
@@ -33,7 +38,10 @@ public class VehicleService {
         return vehicleRepository.save(vehicle);
     }
 
+    @RolesAllowed("ROLE_ADMIN")
     public void deleteVehicleById(Long id) {
+        Vehicle vehicle = vehicleRepository.getReferenceById(id);
+        log.info("Updating vehicle: {}", vehicle.toString());
         vehicleRepository.deleteById(id);
     }
 

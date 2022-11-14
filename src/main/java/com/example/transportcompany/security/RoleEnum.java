@@ -7,9 +7,10 @@ public enum RoleEnum {
     private final String role_user;
 
     RoleEnum(String role_user) {
-        this.role_user=role_user;
+        this.role_user = role_user;
     }
-    public String toString(){
+
+    public String toString() {
         return role_user;
     }
 }

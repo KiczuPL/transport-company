@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByCompanyIdAndStatus(Long companyId, OrderStatus status, Pageable pageable);
+
     List<Order> findAllByStatus(OrderStatus status, Pageable pageable);
 }

@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtConfig {
     private String secretKey = "rgvfdscdzx";
-    private Integer accessTokenExpiration = 600000;
+    private Integer accessTokenExpiration = 60000000;
     private Integer refreshTokenExpiration = 12000000;
 }

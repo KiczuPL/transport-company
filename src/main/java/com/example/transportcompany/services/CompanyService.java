@@ -5,7 +5,11 @@ import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.repositories.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.security.RolesAllowed;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,14 +18,23 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
+    @RolesAllowed("ROLE_ADMIN")
     public Company saveCompany(Company company) {
         return companyRepository.save(company);
     }
 
+    @RolesAllowed("ROLE_ADMIN")
     public Company getCompany(Long id) {
         return companyRepository.getReferenceById(id);
     }
 
+    @RolesAllowed("ROLE_ADMIN")
+    public List<Company> findAllByNameContaining(String namePart, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return companyRepository.findAllByNameContaining(namePart, pageRequest);
+    }
+
+    @RolesAllowed("ROLE_ADMIN")
     public Company updateCompany(Company company) {
         try {
             Company companyById = companyRepository.getReferenceById(company.getId());
@@ -32,7 +45,8 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    public void deleteCompany(Long id){
+    @RolesAllowed("ROLE_ADMIN")
+    public void deleteCompany(Long id) {
         companyRepository.deleteById(id);
     }
 }

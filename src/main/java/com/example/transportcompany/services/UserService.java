@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,48 +27,59 @@ public class UserService implements UserDetailsService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User saveUser(User user){
+    @RolesAllowed("ROLE_ADMIN")
+    public User saveUser(User user) {
         User userByUsername = userRepository.findByUsername(user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (userByUsername != null)
             throw new IllegalArgumentException("There already exists user with that username.");
 
-        log.info("Saving user: "+user.toString());
+        log.info("Saving user: " + user.toString());
         return userRepository.save(user);
     }
 
-    public Role saveRole(Role role){
+    @RolesAllowed("ROLE_ADMIN")
+    public Role saveRole(Role role) {
         log.info("Saving role: " + role.getName());
         return roleRepository.save(role);
     }
 
-    public void addRoleToUser(String username, String rolename){
-        User  user = userRepository.findByUsername(username);
+    @RolesAllowed("ROLE_ADMIN")
+    public void addRoleToUser(String username, String rolename) {
+        User user = userRepository.findByUsername(username);
         Role role = roleRepository.findByName(rolename);
         user.getRoles().add(role);
         userRepository.save(user);
-        log.info("Role: "+rolename +" added to user: " + username);
+        log.info("Role: {} added to user: {}", rolename, username);
     }
 
-    public User getUser(String username){
+    public User getUser(String username) {
         return userRepository.findByUsername(username);
     }
 
-    public List<User> getAllUsers(){
+    @RolesAllowed("ROLE_ADMIN")
+    public List<User> getAllUsers() {
         log.info("getting all users!");
         return userRepository.findAll();
+    }
+
+    @RolesAllowed("ROLE_ADMIN")
+    public void deleteUser(Long id) {
+        User user = userRepository.getReferenceById(id);
+        log.info("Deleting user: {}", user);
+        userRepository.deleteById(id);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
 
-        if(user==null)
+        if (user == null)
             throw new UsernameNotFoundException("User not found in database");
 
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
 }

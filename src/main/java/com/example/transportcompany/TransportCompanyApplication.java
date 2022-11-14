@@ -9,14 +9,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 public class TransportCompanyApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TransportCompanyApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TransportCompanyApplication.class, args);
+    }
 
 
-	@Bean
-	PasswordEncoder passwordEncoder(){
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 }

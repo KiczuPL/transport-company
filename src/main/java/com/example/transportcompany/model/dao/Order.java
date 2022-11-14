@@ -41,4 +41,12 @@ public class Order {
     private OrderStatus status = OrderStatus.PLACED;
     @ManyToOne(fetch = FetchType.EAGER)
     private Vehicle assignedVehicle;
+
+    public Order(@NotNull @NotBlank String addressFrom, @NotNull @NotBlank String addressTo,@NotNull Long companyId, @NotNull LocalDate pickUpDate,  @NotNull VehicleType vehicleType) {
+        this.companyId = companyId;
+        this.addressFrom = addressFrom;
+        this.addressTo = addressTo;
+        this.vehicleType = vehicleType;
+        this.pickUpDate = pickUpDate;
+    }
 }

@@ -1,16 +1,21 @@
 package com.example.transportcompany;
 
+import com.example.transportcompany.model.OrderStatus;
+import com.example.transportcompany.model.VehicleType;
 import com.example.transportcompany.model.dao.Company;
+import com.example.transportcompany.model.dao.Order;
 import com.example.transportcompany.model.dao.Role;
 import com.example.transportcompany.model.dao.User;
 import com.example.transportcompany.repositories.CompanyRepository;
 import com.example.transportcompany.repositories.RoleRepository;
 import com.example.transportcompany.services.CompanyService;
+import com.example.transportcompany.services.OrderService;
 import com.example.transportcompany.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +28,7 @@ public class DataLoader {
 
     private final UserService userService;
     private final CompanyService companyService;
+    private final OrderService orderService;
     private final RoleRepository roleRepository;
     private final CompanyRepository companyRepository;
 
@@ -36,23 +42,68 @@ public class DataLoader {
 
         loadCompanies();
         loadUsers();
+        loadOrders();
 
-        Company company  = new Company(null,"asd","asd","asd");
+        Company company = new Company(null, "asd", "asd", "asd");
         companyService.saveCompany(company);
 
 
-        userService.saveUser(new User(null, "Kiczu", "1234","Kiczu@@@asd","Michał", "Tomczyk", company, new ArrayList<>()));
-        userService.saveUser(new User(null,  "user", "pass","user@","Adam","Nowak", company, new ArrayList<>()));
+        userService.saveUser(new User(null, "Kiczu", "1234", "Kiczu@@@asd", "Michał", "Tomczyk", company, new ArrayList<>()));
+        userService.saveUser(new User(null, "user", "pass", "user@", "Adam", "Nowak", company, new ArrayList<>()));
+        userService.saveUser(new User(null, "user2", "pass", "user@2", "Adam", "Nowak", companyRepository.getReferenceById(10L), new ArrayList<>()));
 
-
-        userService.addRoleToUser("Kiczu",ROLE_ADMIN.toString());
+        userService.addRoleToUser("Kiczu", ROLE_ADMIN.toString());
         userService.addRoleToUser("Kiczu", ROLE_USER.toString());
-        userService.addRoleToUser("user",ROLE_USER.toString());
+        userService.addRoleToUser("user", ROLE_USER.toString());
+        userService.addRoleToUser("user2", ROLE_USER.toString());
 
 
     }
 
-    public void loadCompanies(){
+    public void loadOrders() {
+        orderService.saveOrder( new Order("95 Anniversary Point", "05 Debra Drive", 10L, LocalDate.parse("2022-06-01"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("9 Park Meadow Point", "3 Ridgeview Terrace", 0L, LocalDate.parse("2022-10-21"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("0 Mosinee Pass", "56 Beilfuss Alley", 15L, LocalDate.parse("2022-02-13"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("66 Brickson Park Junction", "90 Shopko Hill", 12L, LocalDate.parse("2022-01-13"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("3628 Florence Lane", "99595 Thackeray Terrace", 16L, LocalDate.parse("2022-10-18"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("203 Lien Drive", "042 Warrior Junction", 11L, LocalDate.parse("2022-08-08"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("1123 Fair Oaks Park", "29280 Continental Circle", 1L, LocalDate.parse("2022-08-18"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("6069 Stone Corner Plaza", "3 Dwight Trail", 17L, LocalDate.parse("2022-01-02"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("1 Birchwood Crossing", "6 Sutherland Junction", 1L, LocalDate.parse("2022-02-01"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("27 Maple Lane", "4210 Scott Crossing", 0L, LocalDate.parse("2022-02-07"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("1 Walton Circle", "34 Forest Avenue", 0L, LocalDate.parse("2021-11-18"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("6 Thackeray Terrace", "9 Arapahoe Junction", 2L, LocalDate.parse("2022-06-14"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("10 Moose Lane", "0 Lunder Alley", 2L, LocalDate.parse("2021-12-09"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("55 Prairie Rose Drive", "0 Gina Hill", 0L, LocalDate.parse("2021-12-12"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("758 Kipling Avenue", "65243 Ridgeview Way", 1L, LocalDate.parse("2022-02-06"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("49131 Oak Drive", "81577 Fairview Lane", 0L, LocalDate.parse("2022-04-10"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("766 Dexter Plaza", "80 Golf Court", 20L, LocalDate.parse("2022-06-26"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("818 Derek Point", "171 Boyd Hill", 21L, LocalDate.parse("2021-12-02"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("6 La Follette Junction", "88653 Oakridge Plaza", 1L, LocalDate.parse("2022-05-18"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("303 Waxwing Court", "69895 Oneill Plaza", 13L, LocalDate.parse("2022-01-14"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("1 Prairie Rose Plaza", "488 Clarendon Parkway", 5L, LocalDate.parse("2021-12-27"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("08638 Grover Lane", "60254 Pond Hill", 6L, LocalDate.parse("2022-03-22"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("888 Farmco Junction", "5216 Laurel Plaza", 2L, LocalDate.parse("2022-02-01"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("07750 Gale Court", "3 Sunfield Park", 7L, LocalDate.parse("2022-01-18"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("8464 Macpherson Avenue", "61138 Hoffman Avenue", 8L, LocalDate.parse("2022-10-24"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("3 Laurel Street", "14707 Cardinal Terrace", 9L, LocalDate.parse("2022-09-29"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("161 Hanson Junction", "9704 Thierer Point", 10L, LocalDate.parse("2022-02-06"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("7 Fairview Park", "25585 Oneill Circle", 13L, LocalDate.parse("2022-05-30"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("2 Towne Hill", "7 Holmberg Parkway", 12L, LocalDate.parse("2022-06-26"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("97647 Namekagon Hill", "331 Swallow Way", 14L, LocalDate.parse("2022-07-26"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("94980 Morning Park", "566 Crowley Drive", 15L, LocalDate.parse("2022-10-02"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("72 Claremont Road", "7485 Mayfield Avenue", 16L, LocalDate.parse("2022-08-26"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("61246 Loftsgordon Road", "6766 Thierer Alley", 17L, LocalDate.parse("2022-02-08"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("8419 Johnson Point", "67668 Buena Vista Place", 18L, LocalDate.parse("2022-05-06"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("0 Stang Way", "3717 Portage Parkway", 19L, LocalDate.parse("2022-02-22"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("6996 Moulton Plaza", "5445 West Center", 20L, LocalDate.parse("2022-03-15"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("51 Fair Oaks Terrace", "8 Pankratz Hill", 1L, LocalDate.parse("2021-12-28"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("0644 Badeau Way", "5653 Farmco Terrace", 2L, LocalDate.parse("2022-01-24"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("3 Crownhardt Road", "5773 Hanover Way", 3L, LocalDate.parse("2022-11-01"), VehicleType.SEMI_TRUCK));
+        orderService.saveOrder( new Order("3017 Bunker Hill Way", "87 Morningstar Street", 4L, LocalDate.parse("2022-06-07"), VehicleType.SEMI_TRUCK));
+    }
+
+    public void loadCompanies() {
         companyService.saveCompany(new Company(null, "Ernser-Crona", "0a629bdb-81f7-4d09-8b91-bcd92c8bf471", "9 Hayes Park"));
         companyService.saveCompany(new Company(null, "Koch-Gulgowski", "990c7f88-bd30-4e71-9bd2-effaf6849e1d", "7 Blackbird Crossing"));
         companyService.saveCompany(new Company(null, "Sipes-Ziemann", "f45f2634-e31a-43fa-8de6-eb8161b6d351", "5 Larry Trail"));
@@ -75,7 +126,7 @@ public class DataLoader {
         companyService.saveCompany(new Company(null, "Schamberger-Hudson", "a0824bdb-71c8-4000-9dd9-4ac26e9cbf64", "9 Nelson Pass"));
     }
 
-    public void loadUsers(){
+    public void loadUsers() {
         userService.saveUser(new User(null, "lgoathrop0", "nDPvJWL", "lgoathrop0@jugem.jp", "Lilyan", "Goathrop", companyRepository.getReferenceById(4L), new ArrayList<>()));
         userService.saveUser(new User(null, "nfehners1", "XAnZ1jwXAA", "nfehners1@wired.com", "Nial", "Fehners", companyRepository.getReferenceById(7L), new ArrayList<>()));
         userService.saveUser(new User(null, "adonkersley2", "1JmhX0aGnf", "adonkersley2@wikipedia.org", "Amalita", "Donkersley", companyRepository.getReferenceById(7L), new ArrayList<>()));

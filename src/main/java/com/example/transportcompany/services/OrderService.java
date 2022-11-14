@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @Service
@@ -19,15 +20,18 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public Order saveOrder(Order order) {
         log.info("Saving order: " + order.toString());
         return orderRepository.save(order);
     }
 
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public Order getOrder(Long id) {
         return orderRepository.getReferenceById(id);
     }
 
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public Order updateOrder(Order order) {
         try {
             Order orderById = orderRepository.getReferenceById(order.getId());
@@ -39,18 +43,20 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public void deleteOrderById(Long id) {
         Order order = orderRepository.getReferenceById(id);
         log.info("Deleting order: " + order.toString());
         orderRepository.deleteById(id);
     }
 
-
-    public List<Order> getOrdersByCompanyIdAndStatus(Long id, OrderStatus status, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("creationDate"));
-        return orderRepository.findAllByCompanyIdAndStatus(id, status, pageRequest);
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
+    public List<Order> getOrdersByCompanyIdAndStatus(Long companyId, OrderStatus status, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("creationDateTime"));
+        return orderRepository.findAllByCompanyIdAndStatus(companyId, status, pageRequest);
     }
 
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public List<Order> getOrdersByStatus(Long id, OrderStatus status, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("creationDate"));
         return orderRepository.findAllByCompanyIdAndStatus(id, status, pageRequest);
