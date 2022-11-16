@@ -48,7 +48,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         User user = (User) authResult.getPrincipal();
 
-        //TODO: replace "secret" with something loaded from encrypted dedicated file
         Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecretKey().getBytes());
 
         String accessToken = JWT.create()

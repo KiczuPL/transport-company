@@ -39,7 +39,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 try {
                     String token = authorizationHeader.substring(7);
-                    //TODO: refactor code so both filters the same Algorithm object - Singleton?
                     Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecretKey().getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);

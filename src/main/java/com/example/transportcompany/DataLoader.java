@@ -6,6 +6,7 @@ import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.model.dao.Order;
 import com.example.transportcompany.model.dao.Role;
 import com.example.transportcompany.model.dao.User;
+import com.example.transportcompany.model.dto.forms.CreateUserForm;
 import com.example.transportcompany.repositories.CompanyRepository;
 import com.example.transportcompany.repositories.RoleRepository;
 import com.example.transportcompany.services.CompanyService;
@@ -48,9 +49,14 @@ public class DataLoader {
         companyService.saveCompany(company);
 
 
-        userService.saveUser(new User(null, "Kiczu", "1234", "Kiczu@@@asd", "Michał", "Tomczyk", company, new ArrayList<>()));
-        userService.saveUser(new User(null, "user", "pass", "user@", "Adam", "Nowak", company, new ArrayList<>()));
-        userService.saveUser(new User(null, "user2", "pass", "user@2", "Adam", "Nowak", companyRepository.getReferenceById(10L), new ArrayList<>()));
+        userService.saveUser(new CreateUserForm( "Kiczu",  "Kiczu@@@asd", "Michał", "Tomczyk", null));
+
+        userService.saveUser(new CreateUserForm( "user",  "user@", "Adam", "Nowak", 5L));
+        userService.saveUser(new CreateUserForm( "user2",  "user@2", "Adam", "Nowak", 10L));
+        userService.changePassword("Kiczu","1234");
+        userService.changePassword("user","pass");
+        userService.changePassword("user2","pass");
+
 
         userService.addRoleToUser("Kiczu", ROLE_ADMIN.toString());
         userService.addRoleToUser("Kiczu", ROLE_USER.toString());
@@ -127,55 +133,54 @@ public class DataLoader {
     }
 
     public void loadUsers() {
-        userService.saveUser(new User(null, "lgoathrop0", "nDPvJWL", "lgoathrop0@jugem.jp", "Lilyan", "Goathrop", companyRepository.getReferenceById(4L), new ArrayList<>()));
-        userService.saveUser(new User(null, "nfehners1", "XAnZ1jwXAA", "nfehners1@wired.com", "Nial", "Fehners", companyRepository.getReferenceById(7L), new ArrayList<>()));
-        userService.saveUser(new User(null, "adonkersley2", "1JmhX0aGnf", "adonkersley2@wikipedia.org", "Amalita", "Donkersley", companyRepository.getReferenceById(7L), new ArrayList<>()));
-        userService.saveUser(new User(null, "mmowles3", "YPtgmFPO7zoi", "mmowles3@vimeo.com", "Mervin", "Mowles", companyRepository.getReferenceById(6L), new ArrayList<>()));
-        userService.saveUser(new User(null, "mbrocklebank4", "lGMo4epTp1", "mbrocklebank4@twitter.com", "Maje", "Brocklebank", companyRepository.getReferenceById(9L), new ArrayList<>()));
-        userService.saveUser(new User(null, "jfernan5", "A0rI59", "jfernan5@youtube.com", "Jarrod", "Fernan", companyRepository.getReferenceById(8L), new ArrayList<>()));
-        userService.saveUser(new User(null, "bivanshintsev6", "hdCXU1c6q", "bivanshintsev6@paypal.com", "Brooke", "Ivanshintsev", companyRepository.getReferenceById(7L), new ArrayList<>()));
-        userService.saveUser(new User(null, "kcavalier7", "mvoNa4eBDe4", "kcavalier7@intel.com", "Karim", "Cavalier", companyRepository.getReferenceById(7L), new ArrayList<>()));
-        userService.saveUser(new User(null, "tscrewton8", "YCKdzpC5nbZK", "tscrewton8@netscape.com", "Therine", "Screwton", companyRepository.getReferenceById(7L), new ArrayList<>()));
-        userService.saveUser(new User(null, "wtennock9", "fsTpXoGHY7tG", "wtennock9@ezinearticles.com", "Wainwright", "Tennock", companyRepository.getReferenceById(9L), new ArrayList<>()));
-        userService.saveUser(new User(null, "mcochrana", "T9jzrClhzXx", "mcochrana@globo.com", "Matthaeus", "Cochran", companyRepository.getReferenceById(5L), new ArrayList<>()));
-        userService.saveUser(new User(null, "lcookesb", "bsWo7V7b", "lcookesb@ocn.ne.jp", "Lay", "Cookes", companyRepository.getReferenceById(5L), new ArrayList<>()));
-        userService.saveUser(new User(null, "rgreastyc", "x3PPt88NglL", "rgreastyc@thetimes.co.uk", "Roma", "Greasty", companyRepository.getReferenceById(9L), new ArrayList<>()));
-        userService.saveUser(new User(null, "candreottid", "QQjaVW", "candreottid@weather.com", "Caroline", "Andreotti", companyRepository.getReferenceById(5L), new ArrayList<>()));
-        userService.saveUser(new User(null, "gcrowcombee", "HVMwnVSt", "gcrowcombee@wisc.edu", "Gaby", "Crowcombe", companyRepository.getReferenceById(10L), new ArrayList<>()));
-        userService.saveUser(new User(null, "hbackef", "wbD2tI", "hbackef@php.net", "Harland", "Backe", companyRepository.getReferenceById(9L), new ArrayList<>()));
-        userService.saveUser(new User(null, "averdieg", "kO8qs5", "averdieg@paypal.com", "Aggy", "Verdie", companyRepository.getReferenceById(4L), new ArrayList<>()));
-        userService.saveUser(new User(null, "ldzenisenkah", "Tvkz3C9m32z", "ldzenisenkah@networksolutions.com", "Leandra", "Dzenisenka", companyRepository.getReferenceById(14L), new ArrayList<>()));
-        userService.saveUser(new User(null, "mfettesi", "luelgK", "mfettesi@eventbrite.com", "Morton", "Fettes", companyRepository.getReferenceById(13L), new ArrayList<>()));
-        userService.saveUser(new User(null, "tbatstonej", "fI3NzZPk", "tbatstonej@blogs.com", "Thorn", "Batstone", companyRepository.getReferenceById(5L), new ArrayList<>()));
-        userService.saveUser(new User(null, "khellyerk", "5Tnp4I", "khellyerk@shutterfly.com", "Korey", "Hellyer", companyRepository.getReferenceById(9L), new ArrayList<>()));
-        userService.saveUser(new User(null, "srentallll", "rabzblH1U8XD", "srentallll@un.org", "Stephi", "Rentalll", companyRepository.getReferenceById(5L), new ArrayList<>()));
-        userService.saveUser(new User(null, "riacovuzzim", "Zqapv83zFdI", "riacovuzzim@infoseek.co.jp", "Roselle", "Iacovuzzi", companyRepository.getReferenceById(5L), new ArrayList<>()));
-        userService.saveUser(new User(null, "ttitmarshn", "W4W0XKXHYw", "ttitmarshn@ed.gov", "Truda", "Titmarsh", companyRepository.getReferenceById(6L), new ArrayList<>()));
-        userService.saveUser(new User(null, "cdewburyo", "VuEIIcyRuU", "cdewburyo@4shared.com", "Corey", "Dewbury", companyRepository.getReferenceById(3L), new ArrayList<>()));
-        userService.saveUser(new User(null, "cmarmonp", "SSYh78WrKL", "cmarmonp@feedburner.com", "Conroy", "Marmon", companyRepository.getReferenceById(4L), new ArrayList<>()));
-        userService.saveUser(new User(null, "tmeysq", "zt40nfA0", "tmeysq@washington.edu", "Teriann", "Meys", companyRepository.getReferenceById(5L), new ArrayList<>()));
-        userService.saveUser(new User(null, "aduddellr", "zHO3Ly", "aduddellr@clickbank.net", "Annissa", "Duddell", companyRepository.getReferenceById(4L), new ArrayList<>()));
-        userService.saveUser(new User(null, "bgantleys", "E5UH0fQ0fK", "bgantleys@marriott.com", "Bard", "Gantley", companyRepository.getReferenceById(7L), new ArrayList<>()));
-        userService.saveUser(new User(null, "hewbanchet", "bCNi8XNQaVA", "hewbanchet@java.com", "Hewitt", "Ewbanche", companyRepository.getReferenceById(5L), new ArrayList<>()));
-        userService.saveUser(new User(null, "gschollingu", "TdcMsX6U", "gschollingu@answers.com", "Gayelord", "Scholling", companyRepository.getReferenceById(12L), new ArrayList<>()));
-        userService.saveUser(new User(null, "hritchleyv", "fjMEPtH3BeTe", "hritchleyv@elegantthemes.com", "Haily", "Ritchley", companyRepository.getReferenceById(7L), new ArrayList<>()));
-        userService.saveUser(new User(null, "ftorbeckw", "yyVpedBUu0m", "ftorbeckw@example.com", "Felicio", "Torbeck", companyRepository.getReferenceById(9L), new ArrayList<>()));
-        userService.saveUser(new User(null, "fgollinx", "KP6W8Tu6wLPC", "fgollinx@feedburner.com", "Fletch", "Gollin", companyRepository.getReferenceById(6L), new ArrayList<>()));
-        userService.saveUser(new User(null, "sandreuttiy", "NOcx1t", "sandreuttiy@wp.com", "Sarajane", "Andreutti", companyRepository.getReferenceById(8L), new ArrayList<>()));
-        userService.saveUser(new User(null, "lfairhurstz", "yzwgQJEYz", "lfairhurstz@rakuten.co.jp", "Legra", "Fairhurst", companyRepository.getReferenceById(8L), new ArrayList<>()));
-        userService.saveUser(new User(null, "gparadine10", "Wx2XA9tov", "gparadine10@reddit.com", "Gavin", "Paradine", companyRepository.getReferenceById(19L), new ArrayList<>()));
-        userService.saveUser(new User(null, "ksuggate11", "a0AaYsRdVSjw", "ksuggate11@is.gd", "Karlen", "Suggate", companyRepository.getReferenceById(9L), new ArrayList<>()));
-        userService.saveUser(new User(null, "cborrott12", "cxK9Ayvk4", "cborrott12@state.gov", "Cathleen", "Borrott", companyRepository.getReferenceById(7L), new ArrayList<>()));
-        userService.saveUser(new User(null, "okhoter13", "H0htiEdFH", "okhoter13@seesaa.net", "Odelinda", "Khoter", companyRepository.getReferenceById(18L), new ArrayList<>()));
-        userService.saveUser(new User(null, "dboylin14", "HLZcHqfgC7ay", "dboylin14@accuweather.com", "Der", "Boylin", companyRepository.getReferenceById(8L), new ArrayList<>()));
-        userService.saveUser(new User(null, "bbruckent15", "vtOKylR1W", "bbruckent15@omniture.com", "Bordy", "Bruckent", companyRepository.getReferenceById(7L), new ArrayList<>()));
-        userService.saveUser(new User(null, "elankford16", "l6EF8PzDWkoM", "elankford16@cnbc.com", "Eddie", "Lankford", companyRepository.getReferenceById(6L), new ArrayList<>()));
-        userService.saveUser(new User(null, "kmcquillin17", "r3TmKxzwfaOi", "kmcquillin17@homestead.com", "Kalindi", "McQuillin", companyRepository.getReferenceById(6L), new ArrayList<>()));
-        userService.saveUser(new User(null, "lpedrollo18", "UqRKvVaBu", "lpedrollo18@shareasale.com", "Leigh", "Pedrollo", companyRepository.getReferenceById(4L), new ArrayList<>()));
-        userService.saveUser(new User(null, "wmatyushonok19", "3MfPIv", "wmatyushonok19@opensource.org", "Waring", "Matyushonok", companyRepository.getReferenceById(17L), new ArrayList<>()));
-        userService.saveUser(new User(null, "lbrastead1a", "5RnpY49", "lbrastead1a@alibaba.com", "Lorrin", "Brastead", companyRepository.getReferenceById(5L), new ArrayList<>()));
-        userService.saveUser(new User(null, "kdestouche1b", "ViaEtrdjHo", "kdestouche1b@miitbeian.gov.cn", "Kalil", "Destouche", companyRepository.getReferenceById(5L), new ArrayList<>()));
-        userService.saveUser(new User(null, "twaddie1c", "88cWdokz", "twaddie1c@i2i.jp", "Tod", "Waddie", companyRepository.getReferenceById(4L), new ArrayList<>()));
-        userService.saveUser(new User(null, "bpedwell1d", "TGwXODc3HE", "bpedwell1d@pinterest.com", "Benjie", "Pedwell", companyRepository.getReferenceById(9L), new ArrayList<>()));
-    }
+        userService.saveUser(new CreateUserForm( "lgoathrop0", "lgoathrop0@jugem.jp", "Lilyan", "Goathrop",  4L ));
+        userService.saveUser(new CreateUserForm( "nfehners1", "nfehners1@wired.com", "Nial", "Fehners",  7L ));
+        userService.saveUser(new CreateUserForm( "adonkersley2", "adonkersley2@wikipedia.org", "Amalita", "Donkersley",  7L ));
+        userService.saveUser(new CreateUserForm( "mmowles3", "mmowles3@vimeo.com", "Mervin", "Mowles",  6L ));
+        userService.saveUser(new CreateUserForm( "mbrocklebank4", "mbrocklebank4@twitter.com", "Maje", "Brocklebank",  9L ));
+        userService.saveUser(new CreateUserForm( "jfernan5", "jfernan5@youtube.com", "Jarrod", "Fernan",  8L ));
+        userService.saveUser(new CreateUserForm( "bivanshintsev6", "bivanshintsev6@paypal.com", "Brooke", "Ivanshintsev",  7L ));
+        userService.saveUser(new CreateUserForm( "kcavalier7", "kcavalier7@intel.com", "Karim", "Cavalier",  7L ));
+        userService.saveUser(new CreateUserForm( "tscrewton8", "tscrewton8@netscape.com", "Therine", "Screwton",  7L ));
+        userService.saveUser(new CreateUserForm( "wtennock9", "wtennock9@ezinearticles.com", "Wainwright", "Tennock",  9L ));
+        userService.saveUser(new CreateUserForm( "mcochrana", "mcochrana@globo.com", "Matthaeus", "Cochran",  5L ));
+        userService.saveUser(new CreateUserForm( "lcookesb", "lcookesb@ocn.ne.jp", "Lay", "Cookes",  5L ));
+        userService.saveUser(new CreateUserForm( "rgreastyc", "rgreastyc@thetimes.co.uk", "Roma", "Greasty",  9L ));
+        userService.saveUser(new CreateUserForm( "candreottid", "candreottid@weather.com", "Caroline", "Andreotti",  5L ));
+        userService.saveUser(new CreateUserForm( "gcrowcombee", "gcrowcombee@wisc.edu", "Gaby", "Crowcombe", 10L ));
+        userService.saveUser(new CreateUserForm( "hbackef", "hbackef@php.net", "Harland", "Backe",  9L ));
+        userService.saveUser(new CreateUserForm( "averdieg", "averdieg@paypal.com", "Aggy", "Verdie",  4L ));
+        userService.saveUser(new CreateUserForm( "ldzenisenkah", "ldzenisenkah@networksolutions.com", "Leandra", "Dzenisenka", 14L ));
+        userService.saveUser(new CreateUserForm( "mfettesi", "mfettesi@eventbrite.com", "Morton", "Fettes", 13L ));
+        userService.saveUser(new CreateUserForm( "tbatstonej", "tbatstonej@blogs.com", "Thorn", "Batstone",  5L ));
+        userService.saveUser(new CreateUserForm( "khellyerk", "khellyerk@shutterfly.com", "Korey", "Hellyer",  9L ));
+        userService.saveUser(new CreateUserForm( "srentallll", "srentallll@un.org", "Stephi", "Rentalll",  5L ));
+        userService.saveUser(new CreateUserForm( "riacovuzzim", "riacovuzzim@infoseek.co.jp", "Roselle", "Iacovuzzi",  5L ));
+        userService.saveUser(new CreateUserForm( "ttitmarshn", "ttitmarshn@ed.gov", "Truda", "Titmarsh",  6L ));
+        userService.saveUser(new CreateUserForm( "cdewburyo", "cdewburyo@4shared.com", "Corey", "Dewbury",  3L ));
+        userService.saveUser(new CreateUserForm( "cmarmonp", "cmarmonp@feedburner.com", "Conroy", "Marmon",  4L ));
+        userService.saveUser(new CreateUserForm( "tmeysq", "tmeysq@washington.edu", "Teriann", "Meys",  5L ));
+        userService.saveUser(new CreateUserForm( "aduddellr", "aduddellr@clickbank.net", "Annissa", "Duddell",  4L ));
+        userService.saveUser(new CreateUserForm( "bgantleys", "bgantleys@marriott.com", "Bard", "Gantley",  7L ));
+        userService.saveUser(new CreateUserForm( "hewbanchet", "hewbanchet@java.com", "Hewitt", "Ewbanche",  5L ));
+        userService.saveUser(new CreateUserForm( "gschollingu", "gschollingu@answers.com", "Gayelord", "Scholling", 12L ));
+        userService.saveUser(new CreateUserForm( "hritchleyv", "hritchleyv@elegantthemes.com", "Haily", "Ritchley",  7L ));
+        userService.saveUser(new CreateUserForm( "ftorbeckw", "ftorbeckw@example.com", "Felicio", "Torbeck",  9L ));
+        userService.saveUser(new CreateUserForm( "fgollinx", "fgollinx@feedburner.com", "Fletch", "Gollin",  6L ));
+        userService.saveUser(new CreateUserForm( "sandreuttiy", "sandreuttiy@wp.com", "Sarajane", "Andreutti",  8L ));
+        userService.saveUser(new CreateUserForm( "lfairhurstz", "lfairhurstz@rakuten.co.jp", "Legra", "Fairhurst",  8L ));
+        userService.saveUser(new CreateUserForm( "gparadine10", "gparadine10@reddit.com", "Gavin", "Paradine", 19L ));
+        userService.saveUser(new CreateUserForm( "ksuggate11", "ksuggate11@is.gd", "Karlen", "Suggate",  9L ));
+        userService.saveUser(new CreateUserForm( "cborrott12", "cborrott12@state.gov", "Cathleen", "Borrott",  7L ));
+        userService.saveUser(new CreateUserForm( "okhoter13", "okhoter13@seesaa.net", "Odelinda", "Khoter", 18L ));
+        userService.saveUser(new CreateUserForm( "dboylin14", "dboylin14@accuweather.com", "Der", "Boylin",  8L ));
+        userService.saveUser(new CreateUserForm( "bbruckent15", "bbruckent15@omniture.com", "Bordy", "Bruckent",  7L ));
+        userService.saveUser(new CreateUserForm( "elankford16", "elankford16@cnbc.com", "Eddie", "Lankford",  6L ));
+        userService.saveUser(new CreateUserForm( "kmcquillin17", "kmcquillin17@homestead.com", "Kalindi", "McQuillin",  6L ));
+        userService.saveUser(new CreateUserForm( "lpedrollo18", "lpedrollo18@shareasale.com", "Leigh", "Pedrollo",  4L ));
+        userService.saveUser(new CreateUserForm( "wmatyushonok19", "wmatyushonok19@opensource.org", "Waring", "Matyushonok", 17L ));
+        userService.saveUser(new CreateUserForm( "lbrastead1a", "lbrastead1a@alibaba.com", "Lorrin", "Brastead",  5L ));
+        userService.saveUser(new CreateUserForm( "kdestouche1b", "kdestouche1b@miitbeian.gov.cn", "Kalil", "Destouche",  5L ));
+        userService.saveUser(new CreateUserForm( "twaddie1c", "twaddie1c@i2i.jp", "Tod", "Waddie",  4L ));
+        userService.saveUser(new CreateUserForm( "bpedwell1d", "bpedwell1d@pinterest.com", "Benjie", "Pedwell",  9L ));}
 }

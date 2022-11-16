@@ -17,30 +17,29 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
-
     @PostMapping("/save")
     public ResponseEntity<Company> saveCompany(@RequestBody Company company) {
         return new ResponseEntity<Company>(companyService.saveCompany(company), HttpStatus.CREATED);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
         return new ResponseEntity<Company>(companyService.getCompany(id), HttpStatus.OK);
     }
 
-    @GetMapping("/get")
+    @GetMapping
     public ResponseEntity<List<Company>> getByCompanyCompany(@RequestParam(required = true) String namePart,
                                                              @RequestParam(defaultValue = "0") Integer page,
                                                              @RequestParam(defaultValue = "10") Integer size) {
         return new ResponseEntity<List<Company>>(companyService.findAllByNameContaining(namePart, page, size), HttpStatus.OK);
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<Company> updateCompany(@Validated @RequestBody Company company) {
         return new ResponseEntity<Company>(companyService.updateCompany(company), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public ResponseEntity<Company> deleteCompany(@RequestBody Long id) {
         companyService.deleteCompany(id);
         return new ResponseEntity<Company>(HttpStatus.OK);

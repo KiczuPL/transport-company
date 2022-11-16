@@ -39,6 +39,11 @@ public class VehicleService {
     }
 
     @RolesAllowed("ROLE_ADMIN")
+    public Vehicle findByRegistrationNumber(String registrationNumber) {
+        return vehicleRepository.findByRegistrationNumber(registrationNumber);
+    }
+
+    @RolesAllowed("ROLE_ADMIN")
     public void deleteVehicleById(Long id) {
         Vehicle vehicle = vehicleRepository.getReferenceById(id);
         log.info("Updating vehicle: {}", vehicle.toString());
