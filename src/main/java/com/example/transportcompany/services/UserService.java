@@ -2,13 +2,13 @@ package com.example.transportcompany.services;
 
 import com.example.transportcompany.model.dao.Role;
 import com.example.transportcompany.model.dao.User;
-import com.example.transportcompany.model.dto.forms.CreateUserForm;
+import com.example.transportcompany.model.dto.UserDto;
+import com.example.transportcompany.model.forms.CreateUserForm;
 import com.example.transportcompany.repositories.CompanyRepository;
 import com.example.transportcompany.repositories.RoleRepository;
 import com.example.transportcompany.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.passay.CharacterData;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @RolesAllowed("ROLE_ADMIN")
-    public User saveUser(CreateUserForm form) {
+    public UserDto saveUser(CreateUserForm form) {
         User userByUsername = userRepository.findByUsername(form.getUsername());
         if (userByUsername != null)
             throw new IllegalArgumentException("There already exists user with that username.");
@@ -56,13 +56,14 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         log.info("Saving user: " + form.toString());
-        return userRepository.save(user);
+        return new UserDto(userRepository.save(user));
     }
 
     @RolesAllowed("ROLE_ADMIN")
     public void changePassword(String username, String password) {
         User user = getUser(username);
         user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
         log.info("Password of user: {} changed", user.getUsername());
     }
 
@@ -73,22 +74,26 @@ public class UserService implements UserDetailsService {
     }
 
     @RolesAllowed("ROLE_ADMIN")
-    public void addRoleToUser(String username, String rolename) {
+    public void addRoleToUser(String username, String roleName) {
         User user = userRepository.findByUsername(username);
-        Role role = roleRepository.findByName(rolename);
+        Role role = roleRepository.findByName(roleName);
         user.getRoles().add(role);
         userRepository.save(user);
-        log.info("Role: {} added to user: {}", rolename, username);
+        log.info("Role: {} added to user: {}", roleName, username);
     }
-
+    @RolesAllowed("ROLE_ADMIN")
     public User getUser(String username) {
         return userRepository.findByUsername(username);
     }
+    @RolesAllowed("ROLE_ADMIN")
+    public UserDto getUserDto(String username) {
+        return new UserDto(userRepository.findByUsername(username));
+    }
 
     @RolesAllowed("ROLE_ADMIN")
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         log.info("getting all users!");
-        return userRepository.findAll();
+        return userRepository.findAll().stream().map((UserDto::new)).toList();
     }
 
     @RolesAllowed("ROLE_ADMIN")
@@ -109,5 +114,9 @@ public class UserService implements UserDetailsService {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+    }
+
+    public boolean isUserExisting(String username) {
+        return getUser(username) != null;
     }
 }

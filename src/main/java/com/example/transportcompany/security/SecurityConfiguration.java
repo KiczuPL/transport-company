@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.example.transportcompany.security.RoleEnum.ROLE_ADMIN;
-import static com.example.transportcompany.security.RoleEnum.ROLE_USER;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -40,9 +38,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/login").permitAll();
         http.authorizeRequests().antMatchers("/login").anonymous();
         http.authorizeRequests().antMatchers("/error").anonymous();
-        http.authorizeRequests().antMatchers("/api/order**").hasAuthority(ROLE_USER.toString());
+        //http.authorizeRequests().antMatchers("/api/order**").hasAuthority(ROLE_USER.toString());
         //http.authorizeRequests().antMatchers("/**").hasAuthority(ROLE_ADMIN.toString());
-        http.authorizeRequests().anyRequest().authenticated()
+        /*http.authorizeRequests().anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .defaultSuccessUrl("/api/users", true)
@@ -52,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .httpBasic();
-
+*/
 
         /*
         http

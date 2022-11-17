@@ -1,16 +1,12 @@
 package com.example.transportcompany.controllers;
 
-import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.model.dao.Vehicle;
-import com.example.transportcompany.repositories.VehicleRepository;
 import com.example.transportcompany.services.VehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

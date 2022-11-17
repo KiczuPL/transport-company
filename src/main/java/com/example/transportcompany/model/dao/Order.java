@@ -42,7 +42,7 @@ public class Order {
     @ManyToOne(fetch = FetchType.EAGER)
     private Vehicle assignedVehicle;
 
-    public Order(@NotNull @NotBlank String addressFrom, @NotNull @NotBlank String addressTo,@NotNull Long companyId, @NotNull LocalDate pickUpDate,  @NotNull VehicleType vehicleType) {
+    public Order(@NotNull @NotBlank String addressFrom, @NotNull @NotBlank String addressTo, @NotNull Long companyId, @NotNull LocalDate pickUpDate, @NotNull VehicleType vehicleType) {
         this.companyId = companyId;
         this.addressFrom = addressFrom;
         this.addressTo = addressTo;

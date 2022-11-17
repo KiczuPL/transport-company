@@ -1,8 +1,8 @@
 package com.example.transportcompany.controllers;
 
 import com.example.transportcompany.model.dao.Role;
-import com.example.transportcompany.model.dao.User;
-import com.example.transportcompany.model.dto.forms.CreateUserForm;
+import com.example.transportcompany.model.dto.UserDto;
+import com.example.transportcompany.model.forms.CreateUserForm;
 import com.example.transportcompany.services.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -23,31 +23,29 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<UserDto>> getUsers() {
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
     @PostMapping("/user/save")
-    public ResponseEntity<User> saveUser(@Validated @RequestBody CreateUserForm form) {
+    public ResponseEntity<UserDto> saveUser(@Validated @RequestBody CreateUserForm form) {
 
-        User user = userService.getUser(form.getUsername());
+        if (!userService.isUserExisting(form.getUsername()))
+            return new ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST);
 
-        if (user != null)
-            return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-
-        User result = userService.saveUser(form);
-        return new ResponseEntity<User>(result, HttpStatus.CREATED);
+        UserDto result = userService.saveUser(form);
+        return new ResponseEntity<UserDto>(result, HttpStatus.CREATED);
     }
 
     @GetMapping("/user/{username}")
-    public ResponseEntity<User> getUser(@PathVariable String username) {
-        return ResponseEntity.ok().body(userService.getUser(username));
+    public ResponseEntity<UserDto> getUser(@PathVariable String username) {
+        return ResponseEntity.ok().body(userService.getUserDto(username));
     }
 
     @DeleteMapping("/user")
-    public ResponseEntity<User> deleteUser(Long id) {
+    public ResponseEntity<UserDto> deleteUser(Long id) {
         userService.deleteUser(id);
-        return new ResponseEntity<User>(HttpStatus.OK);
+        return new ResponseEntity<UserDto>(HttpStatus.OK);
     }
 
     @PostMapping("/role/addtouser")

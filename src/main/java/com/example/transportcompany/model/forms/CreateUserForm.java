@@ -1,4 +1,4 @@
-package com.example.transportcompany.model.dto.forms;
+package com.example.transportcompany.model.forms;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +21,5 @@ public class CreateUserForm {
     @NotNull
     @NotBlank
     private String lastName;
-    @NotNull
     private Long companyId;
 }

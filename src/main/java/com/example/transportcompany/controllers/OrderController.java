@@ -5,7 +5,7 @@ import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.model.dao.Order;
 import com.example.transportcompany.security.JwtConfig;
 import com.example.transportcompany.services.OrderService;
-import com.example.transportcompany.utils.JwtUtils;
+import com.example.transportcompany.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,10 @@ import java.util.List;
 @RequestMapping("/api/order")
 public class OrderController {
 
+    private final UserService userService;
     private final OrderService orderService;
     private final JwtConfig jwtConfig;
+
 
     @PostMapping("/save")
     public ResponseEntity<Order> saveOrder(@Validated @RequestBody Order order) {
@@ -37,8 +39,8 @@ public class OrderController {
     public ResponseEntity<List<Order>> getOrderByStatus(@RequestParam(required = true) OrderStatus status,
                                                         @RequestParam(defaultValue = "0") Integer page,
                                                         @RequestParam(defaultValue = "10") Integer size,
-                                                        HttpServletRequest request) throws Exception {
-        Company c = jwtConfig.getCompanyOfUserJwtAssignedToJwt(request);
+                                                        HttpServletRequest request) {
+        Company c = userService.getUser(request.getUserPrincipal().getName()).getCompany();
         return new ResponseEntity<List<Order>>(orderService.getOrdersByCompanyIdAndStatus(c.getId(), status, page, size), HttpStatus.OK);
     }
 
