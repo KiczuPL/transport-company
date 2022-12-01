@@ -83,16 +83,25 @@ public class UserService implements UserDetailsService {
     }
     @RolesAllowed("ROLE_ADMIN")
     public User getUser(String username) {
+        log.info("Getting user {}",username);
         return userRepository.findByUsername(username);
     }
+
     @RolesAllowed("ROLE_ADMIN")
     public UserDto getUserDto(String username) {
+        log.info("Getting user {}",username);
+        return new UserDto(userRepository.findByUsername(username));
+    }
+
+    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN"})
+    public UserDto getLoggedUserDto(String username) {
+        log.info("Getting user {}",username);
         return new UserDto(userRepository.findByUsername(username));
     }
 
     @RolesAllowed("ROLE_ADMIN")
     public List<UserDto> getAllUsers() {
-        log.info("getting all users!");
+        log.info("Getting all users");
         return userRepository.findAll().stream().map((UserDto::new)).toList();
     }
 

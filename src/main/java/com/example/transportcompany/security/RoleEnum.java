@@ -1,8 +1,8 @@
 package com.example.transportcompany.security;
 
 public enum RoleEnum {
-    ROLE_USER("ROLE_USER"),
-    ROLE_ADMIN("ROLE_ADMIN");
+    ROLE_USER("User"),
+    ROLE_ADMIN("Admin");
 
     private final String role_user;
 

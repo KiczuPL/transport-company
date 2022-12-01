@@ -1,1 +1,1 @@
-# Project for software development methodologies classes at WUT
+# Project for web apps classes at WUT

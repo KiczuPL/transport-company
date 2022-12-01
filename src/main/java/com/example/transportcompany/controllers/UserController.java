@@ -1,5 +1,6 @@
 package com.example.transportcompany.controllers;
 
+import com.example.transportcompany.model.dao.Order;
 import com.example.transportcompany.model.dao.Role;
 import com.example.transportcompany.model.dto.UserDto;
 import com.example.transportcompany.model.forms.CreateUserForm;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -25,6 +27,11 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getUsers() {
         return ResponseEntity.ok().body(userService.getAllUsers());
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<UserDto> getUserInfo( HttpServletRequest request) {
+        return new ResponseEntity<UserDto>(userService.getLoggedUserDto(request.getUserPrincipal().getName()), HttpStatus.OK);
     }
 
     @PostMapping("/user/save")

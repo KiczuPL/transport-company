@@ -13,7 +13,18 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
+import java.util.Collections;
+
+import static com.example.transportcompany.security.RoleEnum.ROLE_ADMIN;
+import static com.example.transportcompany.security.RoleEnum.ROLE_USER;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -28,18 +39,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), jwtConfig);
-        customAuthenticationFilter.setFilterProcessesUrl("/login");
+        customAuthenticationFilter.setFilterProcessesUrl("/api/auth/signin");
 
 
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/auth**").permitAll();
-        http.authorizeRequests().antMatchers("/api/auth**").anonymous();
+        http.cors();
+        http.authorizeRequests().antMatchers("/api/auth/signin").permitAll();
+        http.authorizeRequests().antMatchers("/api/auth/signin").anonymous();
         http.authorizeRequests().antMatchers("/login").permitAll();
         http.authorizeRequests().antMatchers("/login").anonymous();
         http.authorizeRequests().antMatchers("/error").anonymous();
-        //http.authorizeRequests().antMatchers("/api/order**").hasAuthority(ROLE_USER.toString());
-        //http.authorizeRequests().antMatchers("/**").hasAuthority(ROLE_ADMIN.toString());
+        http.authorizeRequests().antMatchers("/api/order**").hasAuthority(ROLE_USER.toString());
+        http.authorizeRequests().antMatchers("/**").hasAuthority(ROLE_ADMIN.toString());
         /*http.authorizeRequests().anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -77,7 +89,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         //http.authorizeRequests().antMatchers(GET, "/api/v1/users/**").hasAnyAuthority("ADMIN");
 
         //http.authorizeRequests();
-
+        //http.addFilterBefore(corsFilter());
         http.addFilter(customAuthenticationFilter);
         http.addFilterAfter(new CustomAuthorizationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class);
 
@@ -92,5 +104,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

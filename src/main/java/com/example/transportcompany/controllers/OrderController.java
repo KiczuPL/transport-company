@@ -3,6 +3,8 @@ package com.example.transportcompany.controllers;
 import com.example.transportcompany.model.OrderStatus;
 import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.model.dao.Order;
+import com.example.transportcompany.model.dto.CreateOrderForm;
+import com.example.transportcompany.model.dto.PageResponse;
 import com.example.transportcompany.security.JwtConfig;
 import com.example.transportcompany.services.OrderService;
 import com.example.transportcompany.services.UserService;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,8 +29,8 @@ public class OrderController {
 
 
     @PostMapping("/save")
-    public ResponseEntity<Order> saveOrder(@Validated @RequestBody Order order) {
-        return new ResponseEntity<Order>(orderService.saveOrder(order), HttpStatus.CREATED);
+    public ResponseEntity<Order> saveOrder(@Validated @RequestBody CreateOrderForm form) {
+        return new ResponseEntity<Order>(orderService.saveOrder(form), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -36,12 +39,12 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> getOrderByStatus(@RequestParam(required = true) OrderStatus status,
-                                                        @RequestParam(defaultValue = "0") Integer page,
-                                                        @RequestParam(defaultValue = "10") Integer size,
-                                                        HttpServletRequest request) {
+    public ResponseEntity<Map<String,Object>> getOrderByStatus(@RequestParam(required = true) OrderStatus status,
+                                                         @RequestParam(defaultValue = "0") Integer page,
+                                                         @RequestParam(defaultValue = "10") Integer size,
+                                                         HttpServletRequest request) {
         Company c = userService.getUser(request.getUserPrincipal().getName()).getCompany();
-        return new ResponseEntity<List<Order>>(orderService.getOrdersByCompanyIdAndStatus(c.getId(), status, page, size), HttpStatus.OK);
+        return new ResponseEntity<Map<String,Object>>(orderService.getOrdersByCompanyIdAndStatus(c.getId(), status, page, size), HttpStatus.OK);
     }
 
     @PutMapping
