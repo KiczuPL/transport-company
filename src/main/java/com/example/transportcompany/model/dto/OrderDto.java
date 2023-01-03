@@ -2,6 +2,7 @@ package com.example.transportcompany.model.dto;
 
 import com.example.transportcompany.model.OrderStatus;
 import com.example.transportcompany.model.VehicleType;
+import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.model.dao.Order;
 import com.example.transportcompany.model.dao.Vehicle;
 import lombok.Data;
@@ -16,8 +17,7 @@ import java.time.LocalDateTime;
 @Data
 public class OrderDto {
     private Long id;
-    private Long companyId;
-    private String companyName;
+    private Company company;
     private String addressFrom;
     private String addressTo;
     private VehicleType vehicleType;
@@ -27,10 +27,9 @@ public class OrderDto {
     private Vehicle assignedVehicle;
 
 
-    public OrderDto(Order order, String companyName) {
+    public OrderDto(Order order) {
         this.id = order.getId();
-        this.companyName=companyName;
-        this.companyId = order.getCompanyId();
+        this.company=order.getCompany();
         this.addressFrom = order.getAddressFrom();
         this.addressTo = order.getAddressTo();
         this.vehicleType = order.getVehicleType();

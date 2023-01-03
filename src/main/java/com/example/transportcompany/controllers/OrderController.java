@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.Map;
 
 @RestController
@@ -46,12 +47,19 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> getOrderByStatus(@RequestParam(required = true) OrderStatus status,
+                                                                @RequestParam(required = false) String addressFrom,
+                                                                @RequestParam(required = false) String addressTo,
+                                                                @RequestParam(required = false) String pickUpDateFrom,
+                                                                @RequestParam(required = false) String pickUpDateTo,
                                                                 @RequestParam(defaultValue = "0") Integer page,
                                                                 @RequestParam(defaultValue = "10") Integer size,
                                                                 HttpServletRequest request) {
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         Company c = userService.getUser(request.getUserPrincipal().getName()).getCompany();
-        return new ResponseEntity<Map<String, Object>>(orderService.getOrdersByCompanyIdAndStatus(c.getId(), status, page, size), HttpStatus.OK);
+        LocalDate dateFrom = pickUpDateFrom==null ? null : LocalDate.parse(pickUpDateFrom);
+                LocalDate dateTo = pickUpDateTo==null ? null : LocalDate.parse(pickUpDateTo);
+        OrderRequest request1= new OrderRequest(c.getName(),addressFrom,addressTo,dateFrom,dateTo,null,null,null,status,page,size);
+        return new ResponseEntity<Map<String, Object>>(orderService.getOrdersByCompanyIdAndStatus(request1), HttpStatus.OK);
     }
 
     @PutMapping

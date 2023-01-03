@@ -21,10 +21,11 @@ import java.time.LocalDateTime;
 @Table(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotNull
-    private Long companyId;
+    @ManyToOne
+    private Company company;
     @NotNull
     @NotBlank
     private String addressFrom;
@@ -42,8 +43,8 @@ public class Order {
     @ManyToOne(fetch = FetchType.EAGER)
     private Vehicle assignedVehicle;
 
-    public Order(@NotNull @NotBlank String addressFrom, @NotNull @NotBlank String addressTo, @NotNull Long companyId, @NotNull LocalDate pickUpDate, @NotNull VehicleType vehicleType) {
-        this.companyId = companyId;
+    public Order(@NotNull @NotBlank String addressFrom, @NotNull @NotBlank String addressTo, @NotNull Company company, @NotNull LocalDate pickUpDate, @NotNull VehicleType vehicleType) {
+        this.company = company;
         this.addressFrom = addressFrom;
         this.addressTo = addressTo;
         this.vehicleType = vehicleType;

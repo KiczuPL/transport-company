@@ -2,12 +2,14 @@ package com.example.transportcompany.model.requests;
 
 import com.example.transportcompany.model.OrderStatus;
 import com.example.transportcompany.model.VehicleType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
 public class OrderRequest {
     String companyName;
     String addressFrom;
