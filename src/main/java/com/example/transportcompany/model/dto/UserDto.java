@@ -12,6 +12,8 @@ import java.util.Collection;
 
 @Data
 public class UserDto {
+    @NotNull(message = "id cannot be null")
+    private Long id;
     @NotNull(message = "username cannot be null")
     @NotBlank
     private String username;
@@ -29,6 +31,7 @@ public class UserDto {
     private Collection<Role> roles;
 
     public UserDto(User user) {
+        this.id = user.getUserId();
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.firstName = user.getFirstName();

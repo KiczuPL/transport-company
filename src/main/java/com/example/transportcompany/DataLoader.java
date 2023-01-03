@@ -2,7 +2,6 @@ package com.example.transportcompany;
 
 import com.example.transportcompany.model.VehicleType;
 import com.example.transportcompany.model.dao.Company;
-import com.example.transportcompany.model.dao.Order;
 import com.example.transportcompany.model.dao.Role;
 import com.example.transportcompany.model.dto.CreateOrderForm;
 import com.example.transportcompany.model.forms.CreateUserForm;
@@ -43,7 +42,7 @@ public class DataLoader {
         loadUsers();
         loadOrders();
 
-        Company company = new Company(null, "asd", "asd", "asd");
+        Company company = new Company(null, "asd", "asd222", "asd");
         companyService.saveCompany(company);
 
 
@@ -52,12 +51,12 @@ public class DataLoader {
         userService.saveUser(new CreateUserForm("user", "user@", "Adam", "Nowak", 5L));
         userService.saveUser(new CreateUserForm("user2", "user@2", "Adam", "Nowak", 10L));
         userService.changePassword("Kiczu", "1234");
-        userService.changePassword("user", "pass");
+        userService.changePassword("user", "1234");
         userService.changePassword("user2", "pass");
 
 
         userService.addRoleToUser("Kiczu", ROLE_ADMIN.toString());
-        userService.addRoleToUser("Kiczu", ROLE_USER.toString());
+        //userService.addRoleToUser("Kiczu", ROLE_USER.toString());
         userService.addRoleToUser("user", ROLE_USER.toString());
         userService.addRoleToUser("user2", ROLE_USER.toString());
 

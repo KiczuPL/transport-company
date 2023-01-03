@@ -1,24 +1,24 @@
 package com.example.transportcompany.model.forms;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@AllArgsConstructor
 @Data
-public class CreateUserForm {
-    @NotNull
+public class UpdateUserForm {
+    @NotNull(message = "id cannot be null")
+    private Long id;
+    @NotNull(message = "username cannot be null")
     @NotBlank
     private String username;
-    @NotNull
+    @NotNull(message = "email cannot be null")
     @NotBlank
     private String email;
-    @NotNull
+    @NotNull(message = "first name cannot be null")
     @NotBlank
     private String firstName;
-    @NotNull
+    @NotNull(message = "lase name cannot be null")
     @NotBlank
     private String lastName;
     @NotNull

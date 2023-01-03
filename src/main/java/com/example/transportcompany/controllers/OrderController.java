@@ -4,7 +4,7 @@ import com.example.transportcompany.model.OrderStatus;
 import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.model.dao.Order;
 import com.example.transportcompany.model.dto.CreateOrderForm;
-import com.example.transportcompany.model.dto.PageResponse;
+import com.example.transportcompany.model.requests.OrderRequest;
 import com.example.transportcompany.security.JwtConfig;
 import com.example.transportcompany.services.OrderService;
 import com.example.transportcompany.services.UserService;
@@ -15,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,13 +37,20 @@ public class OrderController {
         return new ResponseEntity<Order>(orderService.getOrder(id), HttpStatus.OK);
     }
 
+    @PostMapping("/all")
+    public ResponseEntity<Map<String, Object>> getOrders(@RequestBody OrderRequest request) {
+        return new ResponseEntity<Map<String, Object>>(orderService.getOrders(request), HttpStatus.OK);
+    }
+
+
     @GetMapping
-    public ResponseEntity<Map<String,Object>> getOrderByStatus(@RequestParam(required = true) OrderStatus status,
-                                                         @RequestParam(defaultValue = "0") Integer page,
-                                                         @RequestParam(defaultValue = "10") Integer size,
-                                                         HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> getOrderByStatus(@RequestParam(required = true) OrderStatus status,
+                                                                @RequestParam(defaultValue = "0") Integer page,
+                                                                @RequestParam(defaultValue = "10") Integer size,
+                                                                HttpServletRequest request) {
+        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         Company c = userService.getUser(request.getUserPrincipal().getName()).getCompany();
-        return new ResponseEntity<Map<String,Object>>(orderService.getOrdersByCompanyIdAndStatus(c.getId(), status, page, size), HttpStatus.OK);
+        return new ResponseEntity<Map<String, Object>>(orderService.getOrdersByCompanyIdAndStatus(c.getId(), status, page, size), HttpStatus.OK);
     }
 
     @PutMapping
@@ -57,5 +63,6 @@ public class OrderController {
         orderService.deleteOrderById(id);
         return new ResponseEntity<Company>(HttpStatus.OK);
     }
+
 
 }

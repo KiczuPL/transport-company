@@ -16,12 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import static com.example.transportcompany.security.RoleEnum.ROLE_ADMIN;
 import static com.example.transportcompany.security.RoleEnum.ROLE_USER;
@@ -50,7 +46,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/login").permitAll();
         http.authorizeRequests().antMatchers("/login").anonymous();
         http.authorizeRequests().antMatchers("/error").anonymous();
+
+        http.authorizeRequests().antMatchers("/api/order").hasAuthority(ROLE_USER.toString());
         http.authorizeRequests().antMatchers("/api/order**").hasAuthority(ROLE_USER.toString());
+        http.authorizeRequests().antMatchers("/api/user/me").hasAnyAuthority(ROLE_USER.toString(), ROLE_ADMIN.toString());
+
+        http.authorizeRequests().antMatchers("/api/company**").hasAuthority(ROLE_ADMIN.toString());
+        http.authorizeRequests().antMatchers("/api/company/**").hasAuthority(ROLE_ADMIN.toString());
+        http.authorizeRequests().antMatchers("/api/order/**").hasAuthority(ROLE_ADMIN.toString());
         http.authorizeRequests().antMatchers("/**").hasAuthority(ROLE_ADMIN.toString());
         /*http.authorizeRequests().anyRequest().authenticated()
                 .and()
@@ -110,7 +113,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

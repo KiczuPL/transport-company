@@ -4,7 +4,8 @@ package com.example.transportcompany.services;
 import com.example.transportcompany.model.OrderStatus;
 import com.example.transportcompany.model.dao.Order;
 import com.example.transportcompany.model.dto.CreateOrderForm;
-import com.example.transportcompany.model.dto.PageResponse;
+import com.example.transportcompany.model.requests.OrderRequest;
+import com.example.transportcompany.model.specifications.OrderSpecification;
 import com.example.transportcompany.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -23,12 +23,13 @@ import java.util.Map;
 @Slf4j
 public class OrderService {
 
+    private final OrderSpecification orderSpecification;
     private final OrderRepository orderRepository;
 
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public Order saveOrder(CreateOrderForm form) {
 
-        Order order= new Order(form.getAddressFrom(),
+        Order order = new Order(form.getAddressFrom(),
                 form.getAddressTo(),
                 form.getCompanyId(),
                 form.getPickUpDate(),
@@ -41,11 +42,11 @@ public class OrderService {
 
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public Order getOrder(Long id) {
-        log.info("Getting order: {}:",id);
+        log.info("Getting order: {}:", id);
         return orderRepository.getReferenceById(id);
     }
 
-    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
+    @RolesAllowed({"ROLE_ADMIN"})
     public Order updateOrder(Order order) {
         try {
             Order orderById = orderRepository.getReferenceById(order.getId());
@@ -64,16 +65,31 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
+    @RolesAllowed({"ROLE_ADMIN"})
+    public Map<String, Object> getOrders(OrderRequest request) {
+        int pageNumber = request.getPageNumber() == null ? 0 : request.getPageNumber();
+        int pageSize = request.getPageSize() == null ? 10 : request.getPageSize();
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        log.info("Handling get orders request {}", request.toString());
+        Page<Order> pageOrder = orderRepository.findAll(orderSpecification.getSpecification(request), pageRequest);
+        Map<String, Object> response = new HashMap<>();
+        response.put("orders", pageOrder.getContent());
+        response.put("currentPage", pageOrder.getNumber());
+        response.put("totalItems", pageOrder.getTotalElements());
+        response.put("totalPages", pageOrder.getTotalPages());
+        return response;
+    }
+
+    @RolesAllowed({"ROLE_USER"})
     public Map<String, Object> getOrdersByCompanyIdAndStatus(Long companyId, OrderStatus status, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("creationDateTime"));
-        log.info("Getting all orders with status {} for company with id {}", status,companyId);
+        log.info("Getting all orders with status {} for company with id {}", status, companyId);
         Page<Order> pageOrder = orderRepository.findAllByCompanyIdAndStatus(companyId, status, pageRequest);
-        Map<String,Object> response = new HashMap<>();
-        response.put("orders",pageOrder.getContent());
-        response.put("currentPage",pageOrder.getNumber());
-        response.put("totalItems",pageOrder.getTotalElements());
-        response.put("totalPages",pageOrder.getTotalPages());
+        Map<String, Object> response = new HashMap<>();
+        response.put("orders", pageOrder.getContent());
+        response.put("currentPage", pageOrder.getNumber());
+        response.put("totalItems", pageOrder.getTotalElements());
+        response.put("totalPages", pageOrder.getTotalPages());
         return response;
     }
 
@@ -81,12 +97,19 @@ public class OrderService {
     public Map<String, Object> getOrdersByStatus(Long id, OrderStatus status, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("creationDate"));
         log.info("Getting all orders with status {}", status);
-        Page<Order> pageOrder = orderRepository.findAllByStatus( status, pageRequest);
-        Map<String,Object> response = new HashMap<>();
-        response.put("orders",pageOrder.getContent());
-        response.put("currentPage",pageOrder.getNumber());
-        response.put("totalItems",pageOrder.getTotalElements());
-        response.put("totalPages",pageOrder.getTotalPages());
+        Page<Order> pageOrder = orderRepository.findAllByStatus(status, pageRequest);
+        Map<String, Object> response = new HashMap<>();
+        response.put("orders", pageOrder.getContent());
+        response.put("currentPage", pageOrder.getNumber());
+        response.put("totalItems", pageOrder.getTotalElements());
+        response.put("totalPages", pageOrder.getTotalPages());
         return response;
     }
+
+    @RolesAllowed("ROLE_ADMIN")
+    public void deleteAllOrdersFromCompany(Long companyId) {
+        log.info("Deleting all orders from company with id: {}", companyId);
+        orderRepository.deleteAllByCompanyId(companyId);
+    }
+
 }

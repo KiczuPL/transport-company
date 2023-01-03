@@ -12,5 +12,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByCompanyId(Long companyId, Pageable pageable);
 
+    void deleteAllByCompanyId(Long companyId);
+
     void deleteByUsername(String username);
+
+    Page<User> findAllByUsernameContainingIgnoreCaseAndFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndCompanyNameContainingIgnoreCase(String username, String firstName, String lastName, String email, String name, Pageable pageable);
 }
