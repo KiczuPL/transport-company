@@ -32,17 +32,14 @@ public class OrderService {
 
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public Order saveOrder(CreateOrderForm form) {
-        System.err.println("BBBBBBBBB: ");
-        System.err.println("AAAAAAA: " + companyRepository.getReferenceById( form.getCompanyId()).toString());
         Order order = new Order(
                 form.getAddressFrom(),
                 form.getAddressTo(),
-               companyRepository.getReferenceById( form.getCompanyId()),
+                companyRepository.getReferenceById(form.getCompanyId()),
                 form.getPickUpDate(),
                 form.getVehicleType());
 
-System.err.println("ZAPISYWANIE");
-        //log.info("Saving order: {}", order.toString());
+        log.info("Saving order: {}", order.toString());
         return orderRepository.save(order);
     }
 
@@ -82,8 +79,8 @@ System.err.println("ZAPISYWANIE");
                 request.getCompanyName(),
                 request.getAddressFrom(),
                 request.getAddressTo(),
-                request.getPickUpDateFrom()!=null ? request.getPickUpDateFrom() : LocalDate.of(1900,1,1),
-                request.getPickUpDateTo()!=null ? request.getPickUpDateTo() : LocalDate.of(9999,1,1),
+                request.getPickUpDateFrom() != null ? request.getPickUpDateFrom() : LocalDate.of(1900, 1, 1),
+                request.getPickUpDateTo() != null ? request.getPickUpDateTo() : LocalDate.of(9999, 1, 1),
                 request.getStatus(),
                 pageRequest);
         Map<String, Object> response = new HashMap<>();
@@ -104,8 +101,8 @@ System.err.println("ZAPISYWANIE");
                 request.getCompanyName(),
                 request.getAddressFrom(),
                 request.getAddressTo(),
-                request.getPickUpDateFrom()!=null ? request.getPickUpDateFrom() : LocalDate.of(1900,1,1),
-                request.getPickUpDateTo()!=null ? request.getPickUpDateTo() : LocalDate.of(9999,1,1),
+                request.getPickUpDateFrom() != null ? request.getPickUpDateFrom() : LocalDate.of(1900, 1, 1),
+                request.getPickUpDateTo() != null ? request.getPickUpDateTo() : LocalDate.of(9999, 1, 1),
                 request.getStatus(),
                 pageRequest);
         Map<String, Object> response = new HashMap<>();
