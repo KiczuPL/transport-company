@@ -4,6 +4,7 @@ import com.example.transportcompany.model.OrderStatus;
 import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.model.dao.Order;
 import com.example.transportcompany.model.dto.CreateOrderForm;
+import com.example.transportcompany.model.dto.OrderDto;
 import com.example.transportcompany.model.requests.OrderRequest;
 import com.example.transportcompany.security.JwtConfig;
 import com.example.transportcompany.services.OrderService;
@@ -33,8 +34,8 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        return new ResponseEntity<Order>(orderService.getOrder(id), HttpStatus.OK);
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable Long id) {
+        return new ResponseEntity<OrderDto>(orderService.getOrder(id), HttpStatus.OK);
     }
 
     @PostMapping("/all")
@@ -54,14 +55,14 @@ public class OrderController {
     }
 
     @PutMapping
-    public ResponseEntity<Order> updateOrder(@Validated @RequestBody Order order) {
+    public ResponseEntity<Order> updateOrder( @RequestBody Order order) {
         return new ResponseEntity<Order>(orderService.updateOrder(order), HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Company> deleteOrder(@RequestBody Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<OrderDto> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrderById(id);
-        return new ResponseEntity<Company>(HttpStatus.OK);
+        return new ResponseEntity<OrderDto>(HttpStatus.OK);
     }
 
 

@@ -4,8 +4,10 @@ package com.example.transportcompany.services;
 import com.example.transportcompany.model.OrderStatus;
 import com.example.transportcompany.model.dao.Order;
 import com.example.transportcompany.model.dto.CreateOrderForm;
+import com.example.transportcompany.model.dto.OrderDto;
 import com.example.transportcompany.model.requests.OrderRequest;
 import com.example.transportcompany.model.specifications.OrderSpecification;
+import com.example.transportcompany.repositories.CompanyRepository;
 import com.example.transportcompany.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ public class OrderService {
 
     private final OrderSpecification orderSpecification;
     private final OrderRepository orderRepository;
+    private final CompanyRepository companyRepository;
 
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public Order saveOrder(CreateOrderForm form) {
@@ -41,9 +44,10 @@ public class OrderService {
     }
 
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
-    public Order getOrder(Long id) {
+    public OrderDto getOrder(Long id) {
         log.info("Getting order: {}:", id);
-        return orderRepository.getReferenceById(id);
+        Order order = orderRepository.getReferenceById(id);
+        return new OrderDto(order,companyRepository.getReferenceById(order.getCompanyId()).getName());
     }
 
     @RolesAllowed({"ROLE_ADMIN"})
@@ -73,7 +77,7 @@ public class OrderService {
         log.info("Handling get orders request {}", request.toString());
         Page<Order> pageOrder = orderRepository.findAll(orderSpecification.getSpecification(request), pageRequest);
         Map<String, Object> response = new HashMap<>();
-        response.put("orders", pageOrder.getContent());
+        response.put("orders", pageOrder.getContent().stream().map((order -> new OrderDto(order,companyRepository.getReferenceById(order.getCompanyId()).getName()))));
         response.put("currentPage", pageOrder.getNumber());
         response.put("totalItems", pageOrder.getTotalElements());
         response.put("totalPages", pageOrder.getTotalPages());
@@ -86,7 +90,7 @@ public class OrderService {
         log.info("Getting all orders with status {} for company with id {}", status, companyId);
         Page<Order> pageOrder = orderRepository.findAllByCompanyIdAndStatus(companyId, status, pageRequest);
         Map<String, Object> response = new HashMap<>();
-        response.put("orders", pageOrder.getContent());
+        response.put("orders", pageOrder.getContent().stream().map((order -> new OrderDto(order,companyRepository.getReferenceById(order.getCompanyId()).getName()))));
         response.put("currentPage", pageOrder.getNumber());
         response.put("totalItems", pageOrder.getTotalElements());
         response.put("totalPages", pageOrder.getTotalPages());
@@ -99,7 +103,7 @@ public class OrderService {
         log.info("Getting all orders with status {}", status);
         Page<Order> pageOrder = orderRepository.findAllByStatus(status, pageRequest);
         Map<String, Object> response = new HashMap<>();
-        response.put("orders", pageOrder.getContent());
+        response.put("orders", pageOrder.getContent().stream().map((order -> new OrderDto(order,companyRepository.getReferenceById(order.getCompanyId()).getName()))));
         response.put("currentPage", pageOrder.getNumber());
         response.put("totalItems", pageOrder.getTotalElements());
         response.put("totalPages", pageOrder.getTotalPages());
