@@ -2,6 +2,7 @@ package com.example.transportcompany.model.dao;
 
 import com.example.transportcompany.model.OrderStatus;
 import com.example.transportcompany.model.VehicleType;
+import com.example.transportcompany.model.dto.OrderDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,5 +50,17 @@ public class Order {
         this.addressTo = addressTo;
         this.vehicleType = vehicleType;
         this.pickUpDate = pickUpDate;
+    }
+
+    public Order(OrderDto order){
+        this.id = order.getId();
+        this.company=order.getCompany();
+        this.addressFrom = order.getAddressFrom();
+        this.addressTo = order.getAddressTo();
+        this.vehicleType = order.getVehicleType();
+        this.pickUpDate = order.getPickUpDate();
+        this.creationDateTime = order.getCreationDateTime();
+        this.status = order.getStatus();
+        this.assignedVehicle = order.getAssignedVehicle();
     }
 }

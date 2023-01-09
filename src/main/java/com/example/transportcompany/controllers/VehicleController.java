@@ -27,7 +27,7 @@ public class VehicleController {
 
 
     @GetMapping
-    public ResponseEntity<Vehicle> getByCompany(@RequestParam(required = true) String registrationNumber) {
+    public ResponseEntity<Vehicle> getByRegistrationNumber(@RequestParam(required = true) String registrationNumber) {
         return new ResponseEntity<Vehicle>(vehicleService.findByRegistrationNumber(registrationNumber), HttpStatus.OK);
     }
 

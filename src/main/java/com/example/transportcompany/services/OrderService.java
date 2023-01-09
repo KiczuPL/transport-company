@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -51,15 +52,18 @@ public class OrderService {
     }
 
     @RolesAllowed({"ROLE_ADMIN"})
-    public Order updateOrder(Order order) {
+    public OrderDto updateOrder(OrderDto order) {
+        Order orderById;
         try {
-            Order orderById = orderRepository.getReferenceById(order.getId());
+            orderById = orderRepository.getReferenceById(order.getId());
         } catch (Exception exception) {
-            throw new IllegalArgumentException(exception.getMessage());
+            throw new NoSuchElementException(exception.getMessage());
         }
 
-        log.info("Updating order: {}", order.toString());
-        return orderRepository.save(order);
+        log.info("Updating order: {} to {}", orderById.toString(), order.toString());
+        Order updated = new Order(order);
+        updated.setCreationDateTime(orderById.getCreationDateTime());
+        return new OrderDto(orderRepository.save(updated));
     }
 
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
@@ -69,11 +73,11 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    @RolesAllowed({"ROLE_ADMIN"})
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public Map<String, Object> getOrders(OrderRequest request) {
         int pageNumber = request.getPageNumber() == null ? 0 : request.getPageNumber();
         int pageSize = request.getPageSize() == null ? 10 : request.getPageSize();
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("creationDateTime"));
         log.info("Handling get orders request {}", request.toString());
         Page<Order> pageOrder = orderRepository.findAllByCompanyNameContainingIgnoreCaseAndAddressFromContainingIgnoreCaseAndAddressToContainingIgnoreCaseAndPickUpDateBetweenAndStatus(
                 request.getCompanyName(),
