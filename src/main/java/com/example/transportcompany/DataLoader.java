@@ -5,11 +5,13 @@ import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.model.dao.Role;
 import com.example.transportcompany.model.dto.CreateOrderForm;
 import com.example.transportcompany.model.forms.CreateUserForm;
+import com.example.transportcompany.model.forms.CreateVehicleForm;
 import com.example.transportcompany.repositories.CompanyRepository;
 import com.example.transportcompany.repositories.RoleRepository;
 import com.example.transportcompany.services.CompanyService;
 import com.example.transportcompany.services.OrderService;
 import com.example.transportcompany.services.UserService;
+import com.example.transportcompany.services.VehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +29,7 @@ public class DataLoader {
     private final UserService userService;
     private final CompanyService companyService;
     private final OrderService orderService;
+    private final VehicleService vehicleService;
     private final RoleRepository roleRepository;
     private final CompanyRepository companyRepository;
 
@@ -41,6 +44,7 @@ public class DataLoader {
         loadCompanies();
         loadUsers();
         loadOrders();
+        loadVehicles();
 
         Company company = new Company(null, "asd", "asd222", "asd");
         companyService.saveCompany(company);
@@ -61,6 +65,17 @@ public class DataLoader {
         userService.addRoleToUser("user2", ROLE_USER.toString());
 
 
+    }
+
+    private void loadVehicles() {
+        vehicleService.saveVehicle(new CreateVehicleForm("A1","WAW12345",VehicleType.SEMI_TRUCK));
+        vehicleService.saveVehicle(new CreateVehicleForm("A2","WOT12300",VehicleType.DELIVERY_TRUCK));
+        vehicleService.saveVehicle(new CreateVehicleForm("A5","WPA12399",VehicleType.TANK_TRUCK));
+        vehicleService.saveVehicle(new CreateVehicleForm("A3","XYZ12377",VehicleType.SEMI_TRUCK));
+        vehicleService.saveVehicle(new CreateVehicleForm("B1","WAW11111",VehicleType.SEMI_TRUCK));
+        vehicleService.saveVehicle(new CreateVehicleForm("B2","WOT22222",VehicleType.DELIVERY_TRUCK));
+        vehicleService.saveVehicle(new CreateVehicleForm("B5","WPA33333",VehicleType.TANK_TRUCK));
+        vehicleService.saveVehicle(new CreateVehicleForm("B3","XYZ44444",VehicleType.SEMI_TRUCK));
     }
 
     public void loadOrders() {
