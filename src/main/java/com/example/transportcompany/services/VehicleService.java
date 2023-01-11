@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.security.RolesAllowed;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -65,12 +66,16 @@ public class VehicleService {
 
     @RolesAllowed("ROLE_ADMIN")
     public Vehicle updateVehicle(Vehicle vehicle) {
+        Vehicle vehicleById;
         try {
-            Vehicle vehicleById = vehicleRepository.getReferenceById(vehicle.getId());
-            log.info("Updating vehicle: {}  to: {}", vehicleById.toString(), vehicle.toString());
+            vehicleById = vehicleRepository.getReferenceById(vehicle.getId());
         } catch (Exception exception) {
-            throw new IllegalArgumentException(exception.getMessage());
+            throw new NoSuchElementException("No such vehicle exists in repository");
         }
+        if(vehicleRepository.findByVehicleIdentifier(vehicle.getVehicleIdentifier()) != null || vehicleRepository.findByRegistrationNumber(vehicle.getRegistrationNumber())!=null)
+            throw new IllegalArgumentException("There already exists vehicle with that id or registration number in repository");
+
+        log.info("Updating vehicle: {}  to: {}", vehicleById.toString(), vehicle.toString());
         return vehicleRepository.save(vehicle);
     }
 
@@ -82,7 +87,7 @@ public class VehicleService {
     @RolesAllowed("ROLE_ADMIN")
     public void deleteVehicleById(Long id) {
         Vehicle vehicle = vehicleRepository.getReferenceById(id);
-        log.info("Updating vehicle: {}", vehicle.toString());
+        log.info("Deleting vehicle: {}", vehicle.toString());
         vehicleRepository.deleteById(id);
     }
 
