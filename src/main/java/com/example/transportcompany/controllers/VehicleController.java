@@ -56,7 +56,7 @@ public class VehicleController {
     @GetMapping("/test")
     public void test(){
         System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        emailService.sendSimpleMessage("KiczuPL@outlook.com","łohou!","xD");
+        //emailService.sendSimpleMessage("KiczuPL@outlook.com","łohou!","xD");
     }
 
 

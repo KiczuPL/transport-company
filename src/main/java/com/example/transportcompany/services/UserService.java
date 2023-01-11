@@ -1,5 +1,6 @@
 package com.example.transportcompany.services;
 
+import com.example.transportcompany.email.EmailServiceImpl;
 import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.model.dao.Role;
 import com.example.transportcompany.model.dao.User;
@@ -39,9 +40,10 @@ public class UserService implements UserDetailsService {
     private final CompanyRepository companyRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailServiceImpl emailService;
 
     @RolesAllowed({"ROLE_ADMIN"})
-    public UserDto saveUser(CreateUserForm form) {
+    public UserDto saveUserNoEmail(CreateUserForm form) {
         log.info("Saving user: " + form.toString());
         User userByUsername = userRepository.findByUsername(form.getUsername());
         if (userByUsername != null)
@@ -64,6 +66,34 @@ public class UserService implements UserDetailsService {
 
 
         return new UserDto(userRepository.save(user));
+    }
+
+    @RolesAllowed({"ROLE_ADMIN"})
+    public UserDto saveUser(CreateUserForm form) {
+        log.info("Saving user: " + form.toString());
+        User userByUsername = userRepository.findByUsername(form.getUsername());
+        if (userByUsername != null)
+            throw new IllegalArgumentException("There already exists user with that username.");
+
+
+        PasswordGenerator passwordGenerator = new PasswordGenerator();
+        CharacterRule rule = new CharacterRule(EnglishCharacterData.Alphabetical);
+        String password = passwordGenerator.generatePassword(10, rule);
+        User user = new User(
+                null,
+                form.getUsername(),
+                password,
+                form.getEmail(),
+                form.getFirstName(),
+                form.getLastName(),
+                companyRepository.getReferenceById(form.getCompanyId()),
+                new ArrayList<>()
+        );
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        UserDto result = new UserDto(userRepository.save(user));
+        emailService.sendCreateAccountMessage(form.getEmail(), form.getUsername(), password);
+
+        return result;
     }
 
     @RolesAllowed({"ROLE_ADMIN"})
