@@ -1,5 +1,6 @@
 package com.example.transportcompany.controllers;
 
+import com.example.transportcompany.email.EmailServiceImpl;
 import com.example.transportcompany.model.VehicleType;
 import com.example.transportcompany.model.dao.Vehicle;
 import com.example.transportcompany.model.forms.CreateVehicleForm;
@@ -48,6 +49,14 @@ public class VehicleController {
     public ResponseEntity<Vehicle> deleteVehicle(@PathVariable Long id) {
         vehicleService.deleteVehicleById(id);
         return new ResponseEntity<Vehicle>(HttpStatus.OK);
+    }
+
+    private final EmailServiceImpl emailService;
+
+    @GetMapping("/test")
+    public void test(){
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        emailService.sendSimpleMessage("KiczuPL@outlook.com","łohou!","xD");
     }
 
 
