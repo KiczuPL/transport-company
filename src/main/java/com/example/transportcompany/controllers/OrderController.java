@@ -5,6 +5,7 @@ import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.model.dao.Order;
 import com.example.transportcompany.model.dto.CreateOrderForm;
 import com.example.transportcompany.model.dto.OrderDto;
+import com.example.transportcompany.model.forms.AssignVehicleToOrderForm;
 import com.example.transportcompany.model.requests.OrderRequest;
 import com.example.transportcompany.security.JwtConfig;
 import com.example.transportcompany.services.OrderService;
@@ -65,16 +66,16 @@ public class OrderController {
         System.out.println(order.toString());
         return new ResponseEntity<OrderDto>(orderService.updateOrder(order), HttpStatus.OK);
     }
-    @PutMapping("/test")
-    public ResponseEntity<String> test(@RequestBody OrderDto order) {
-        System.out.println(order.toString());
-        return new ResponseEntity<String>("ddddddddddd", HttpStatus.OK);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<OrderDto> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrderById(id);
         return new ResponseEntity<OrderDto>(HttpStatus.OK);
+    }
+
+    @PostMapping("/assignvehicle")
+    public void assignVehicle(@RequestBody AssignVehicleToOrderForm form){
+        orderService.assignVehicle(form.getOrderId(),form.getVehicleId());
     }
 
 

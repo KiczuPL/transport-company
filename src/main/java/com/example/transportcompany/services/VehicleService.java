@@ -54,7 +54,7 @@ public class VehicleService {
             typeTo = type;
         }
 
-        Page<Vehicle> pageOrder = vehicleRepository.findAllByRegistrationNumberContainingIgnoreCaseAndAndVehicleIdentifierContainingIgnoreCaseAndTypeGreaterThanEqualAndTypeLessThanEqual(registrationNumber, vehicleIdentifier, typeFrom, typeTo, pageRequest);
+        Page<Vehicle> pageOrder = vehicleRepository.findAllByRegistrationNumberContainingIgnoreCaseAndVehicleIdentifierContainingIgnoreCaseAndTypeGreaterThanEqualAndTypeLessThanEqual(registrationNumber, vehicleIdentifier, typeFrom, typeTo, pageRequest);
 
         Map<String, Object> response = new HashMap<>();
         response.put("vehicles", pageOrder.getContent().stream());

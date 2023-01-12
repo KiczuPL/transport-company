@@ -3,11 +3,13 @@ package com.example.transportcompany.services;
 
 import com.example.transportcompany.model.OrderStatus;
 import com.example.transportcompany.model.dao.Order;
+import com.example.transportcompany.model.dao.Vehicle;
 import com.example.transportcompany.model.dto.CreateOrderForm;
 import com.example.transportcompany.model.dto.OrderDto;
 import com.example.transportcompany.model.requests.OrderRequest;
 import com.example.transportcompany.repositories.CompanyRepository;
 import com.example.transportcompany.repositories.OrderRepository;
+import com.example.transportcompany.repositories.VehicleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final CompanyRepository companyRepository;
+    private final VehicleRepository vehicleRepository;
 
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public Order saveOrder(CreateOrderForm form) {
@@ -134,6 +137,18 @@ public class OrderService {
     public void deleteAllOrdersFromCompany(Long companyId) {
         log.info("Deleting all orders from company with id: {}", companyId);
         orderRepository.deleteAllByCompanyId(companyId);
+    }
+
+    @RolesAllowed({"ROLE_ADMIN"})
+    public void assignVehicle(Long orderId, Long vehicleId){
+        Order order = orderRepository.getReferenceById(orderId);
+        log.warn("{}",order);
+        log.warn("{}----{}",orderId,vehicleId);
+        Vehicle vehicle = vehicleRepository.getReferenceById(vehicleId);
+        log.warn("{}",vehicle);
+        order.setAssignedVehicle(vehicle);
+        orderRepository.save(order);
+        log.info("Assigned vehicle: {} to order: {}",vehicle,order);
     }
 
 }

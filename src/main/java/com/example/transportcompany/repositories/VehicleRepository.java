@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
     Vehicle findByRegistrationNumber(String registrationNumber);
     Vehicle findByVehicleIdentifier(String vehicleIdentifier);
-    Page<Vehicle> findAllByRegistrationNumberContainingIgnoreCaseAndAndVehicleIdentifierContainingIgnoreCaseAndTypeGreaterThanEqualAndTypeLessThanEqual(String registrationNumver, String vehicleIdentifier, VehicleType vehicleTypeFrom, VehicleType vehicleTypeTo, Pageable pageable);
+    Page<Vehicle> findAllByRegistrationNumberContainingIgnoreCaseAndVehicleIdentifierContainingIgnoreCaseAndTypeGreaterThanEqualAndTypeLessThanEqual(String registrationNumber, String vehicleIdentifier, VehicleType vehicleTypeFrom, VehicleType vehicleTypeTo, Pageable pageable);
 }

@@ -50,14 +50,4 @@ public class VehicleController {
         vehicleService.deleteVehicleById(id);
         return new ResponseEntity<Vehicle>(HttpStatus.OK);
     }
-
-    private final EmailServiceImpl emailService;
-
-    @GetMapping("/test")
-    public void test(){
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        //emailService.sendSimpleMessage("KiczuPL@outlook.com","łohou!","xD");
-    }
-
-
 }

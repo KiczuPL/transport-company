@@ -30,6 +30,8 @@ import javax.annotation.security.RolesAllowed;
 import javax.transaction.Transactional;
 import java.util.*;
 
+import static com.example.transportcompany.security.RoleEnum.ROLE_USER;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -72,9 +74,14 @@ public class UserService implements UserDetailsService {
     public UserDto saveUser(CreateUserForm form) {
         log.info("Saving user: " + form.toString());
         User userByUsername = userRepository.findByUsername(form.getUsername());
+        Company company = companyRepository.findCompanyById(form.getCompanyId());
         if (userByUsername != null)
             throw new IllegalArgumentException("There already exists user with that username.");
-
+        User userByEmail = userRepository.findByEmail(form.getEmail());
+        if (userByEmail != null)
+            throw new IllegalArgumentException("There already exists user with that email.");
+        if (company == null)
+            throw new IllegalArgumentException("No such company");
 
         PasswordGenerator passwordGenerator = new PasswordGenerator();
         CharacterRule rule = new CharacterRule(EnglishCharacterData.Alphabetical);
@@ -90,8 +97,9 @@ public class UserService implements UserDetailsService {
                 new ArrayList<>()
         );
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.getRoles().add(roleRepository.findByName(ROLE_USER.toString()));
         UserDto result = new UserDto(userRepository.save(user));
-        emailService.sendCreateAccountMessage(form.getEmail(), form.getUsername(), password);
+        emailService.sendCreateAccountMessage(form.getEmail(), form.getUsername(), password, company.getName());
 
         return result;
     }

@@ -54,7 +54,7 @@ public class CompanyService {
         int pageSize = request.getPageSize() == null ? 10 : request.getPageSize();
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, "name"));
         log.info("Handling get companies request {}", request.toString());
-        Page<Order> pageOrder = companyRepository.findAll(companySpecification.getSpecification(request), pageRequest);
+        Page<Company> pageOrder = companyRepository.findAll(companySpecification.getSpecification(request), pageRequest);
         Map<String, Object> response = new HashMap<>();
         response.put("companies", pageOrder.getContent());
         response.put("currentPage", pageOrder.getNumber());

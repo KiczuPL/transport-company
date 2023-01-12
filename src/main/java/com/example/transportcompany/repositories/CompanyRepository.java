@@ -11,8 +11,8 @@ import java.util.List;
 
 public interface CompanyRepository extends JpaRepository<Company, Long> {
     List<Company> findAllByNameContaining(String name, Pageable pageable);
-
+    Company findCompanyById(Long id);
     List<Company> findAllByNameContaining(String name);
 
-    Page<Order> findAll(Specification<Company> spec, Pageable pageable);
+    Page<Company> findAll(Specification<Company> spec, Pageable pageable);
 }

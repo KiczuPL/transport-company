@@ -13,12 +13,12 @@ public class EmailServiceImpl {
     private final JavaMailSender emailSender;
 
 
-    public void sendCreateAccountMessage(String to, String username, String password){
+    public void sendCreateAccountMessage(String to, String username,String company, String password){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("mt.transport.company@gmail.com");
         message.setTo(to);
         message.setSubject("Welcome to transport company");
-        message.setText("your username: "+username+"\nyour password: "+password);
+        message.setText("your username: "+username+"\nyour password: "+password+"\nyour company: "+company);
         emailSender.send(message);
     }
 }
