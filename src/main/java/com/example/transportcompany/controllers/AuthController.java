@@ -4,16 +4,15 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.transportcompany.model.dao.Company;
 import com.example.transportcompany.model.dao.Role;
 import com.example.transportcompany.model.dao.User;
+import com.example.transportcompany.model.forms.ChangePasswordForm;
 import com.example.transportcompany.security.JwtConfig;
 import com.example.transportcompany.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,14 +28,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "localhost:3000", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final JwtConfig jwtConfig;
     private final UserService userService;
 
-    @PostMapping("/auth/refreshtoken")
+    @PostMapping("/refreshtoken")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
 
@@ -77,4 +76,12 @@ public class AuthController {
             throw new RuntimeException("Refresh token is missing");
         }
     }
+
+    @PostMapping("/passwd")
+    public void changePassword(@RequestBody ChangePasswordForm form,
+                               HttpServletRequest request) {
+        User u = userService.getUser(request.getUserPrincipal().getName());
+        userService.changeUserPassword(form.getNewPassword(),u.getUsername());
+    }
+
 }

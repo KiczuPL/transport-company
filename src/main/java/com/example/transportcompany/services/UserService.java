@@ -158,6 +158,15 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
+    @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
+    public void changeUserPassword(String password,String username){
+        User user = userRepository.findByUsername(username);
+        log.info("User: {} requested to change password", user.getUsername());
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+        log.info("User: {} , password changed successfully", user.getUsername());
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
